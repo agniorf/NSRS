@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Optimal Trees Prediction Tool</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>.card {
+  background-color: #fff;
+}
+
+.card .button-row {
+  margin: 0px;
+}
+
+.card-content .btn {
+  width: 100%;
+}
+
+.card-content .button-row .button {
+  padding: 0px 0px;
+}
+.card-content .button-row .button:not(:last-child) {
+  padding-right: 12px;
+}
+.card-content .button-row .button:not(:first-child) {
+  padding-left: 12px;
+}
+
+.card-content.main .card-title {
+  line-height: 24px;
+  font-size: 16px;
+}
+
+.card .card-table {
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 0px;
+}
+
+td, th {
+  padding: 5px 5px;
+  text-align: center;
+}
+
+tr .highlighted {
+  background-color: #008975;
+}
+
+nav {
+  height: 48px;
+  line-height: 48px;
+  margin-bottom: 1rem;
+}
+
+nav i, nav [class^="mdi-"], nav [class*="mdi-"], nav i.material-icons {
+    height: 48px;
+    line-height: 48px;
+}
+
+nav .button-collapse i {
+    height: 48px;
+    line-height: 48px;
+}
+
+nav .brand-logo {
+    font-size: 1.2rem;
+    height: 48px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+nav .brand-logo img {
+    height: 38px;
+    position: absolute;
+    margin-top: 5px;
+    left: 6px;
+}
+
+.card .card-results {
+  text-align: center;
+  font-size: 14px;
+}
+
+.card .stats {
+  color: #008975;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(160,160,160,0.2);
+}
+
+.card-content.main {
+  padding-top: 16px;
+}
+
+.card-content.main .input-field{
+  margin: 0;
+}
+
+.primary {
+  background-color: #00aa8d !important;
+}
+
+.primary-lighter {
+  background-color: #00bf9a !important;
+}
+
+.primary-darker {
+  background-color: #008975 !important;
+}
+
+body {
+  background-color: #e1e1e1;
+}
+
+.progress {
+  position: fixed;
+  background-color: #ffe0b2;
+  margin: 0;
+}
+
+.progress .determinate {
+  background-color: #f69019;
+}
+
+.unselected {
+  background-color: #DFDFDF !important;
+  color: #9F9F9F !important;
+  box-shadow: none;
+}
+</style>
+  </head>
+
+  <body>
+  <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper primary">
+        <a class="brand-logo">
+          <img src="http://www.mit.edu/~zhuo/logo.png">
+          Optimal Trees Prediction Tool
+        </a>
+    </div>
+      <div class="progress">
+        <div class="determinate" style="width: 0%"></div>
+      </div>
+    </nav>
+
+  </div>
+    <div class="container row">
+      <div class="container-col row col s12 m10 push-m1 l8 push-l2 xl6 push-xl3">
+        <div id="question-container">
+          <div id="dynamic-questions"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large" style="background-color:#f69019;">
+        <i class="large material-icons" style="font-size:2.5rem;">refresh</i>
+      </a>
+    </div>
+    <script>
+      (function(){
+        treejson = {
+    "nodes": [
+        {
+            "id": 1,
+            "parent": -2,
+            "lower_child": 2,
+            "upper_child": 21,
+            "n_node_samples": 14195,
+            "depth": 0,
+            "split_type": "CATEGORIC",
+            "feature": "Do you have a Cardiovascular Disease?",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "Unknown"
+                ],
+                [
+                    2,
+                    "No"
+                ],
+                [
+                    3,
+                    "Yes"
+                ]
+            ],
+            "threshold": 0.25,
+            "leaftext": "Stroke Risk: 5.38%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">13432</TD>\n          <TD ALIGN=\"RIGHT\">94.62%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">763</TD>\n          <TD ALIGN=\"RIGHT\">5.38%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 2,
+            "parent": 1,
+            "lower_child": 3,
+            "upper_child": 18,
+            "n_node_samples": 12918,
+            "depth": 1,
+            "split_type": "PARALLEL",
+            "feature": "What is your Blood Glucose level? (mg/dl)",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 229.5,
+            "leaftext": "Stroke Risk: 2.75%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">12563</TD>\n          <TD ALIGN=\"RIGHT\">97.25%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">355</TD>\n          <TD ALIGN=\"RIGHT\">2.75%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 3,
+            "parent": 2,
+            "lower_child": 4,
+            "upper_child": 11,
+            "n_node_samples": 12809,
+            "depth": 2,
+            "split_type": "PARALLEL",
+            "feature": "What is your High-density lipoprotein (HDL) level? (mg/dl)",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 39.083333335,
+            "leaftext": "Stroke Risk: 2.37%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">12505</TD>\n          <TD ALIGN=\"RIGHT\">97.63%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">304</TD>\n          <TD ALIGN=\"RIGHT\">2.37%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 4,
+            "parent": 3,
+            "lower_child": 5,
+            "upper_child": 6,
+            "n_node_samples": 2813,
+            "depth": 3,
+            "split_type": "PARALLEL",
+            "feature": "What is your Systolic Blood Pressure? (mmHg)",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 141.0,
+            "leaftext": "Stroke Risk: 4.19%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">2695</TD>\n          <TD ALIGN=\"RIGHT\">95.81%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">118</TD>\n          <TD ALIGN=\"RIGHT\">4.19%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 5,
+            "parent": 4,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 2185,
+            "depth": 4,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 0.2589285714285714,
+            "leaftext": "Stroke Risk: 2.47%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">2131</TD>\n          <TD ALIGN=\"RIGHT\">97.53%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">54</TD>\n          <TD ALIGN=\"RIGHT\">2.47%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 6,
+            "parent": 4,
+            "lower_child": 7,
+            "upper_child": 8,
+            "n_node_samples": 628,
+            "depth": 4,
+            "split_type": "CATEGORIC",
+            "feature": "What is your Gender?",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "Unknown"
+                ],
+                [
+                    2,
+                    "Male"
+                ],
+                [
+                    3,
+                    "Female"
+                ]
+            ],
+            "threshold": 0.125,
+            "leaftext": "Stroke Risk: 10.19%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">564</TD>\n          <TD ALIGN=\"RIGHT\">89.81%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">64</TD>\n          <TD ALIGN=\"RIGHT\">10.19%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 7,
+            "parent": 6,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 454,
+            "depth": 5,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 1.6e-322,
+            "leaftext": "Stroke Risk: 4.19%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">435</TD>\n          <TD ALIGN=\"RIGHT\">95.81%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">19</TD>\n          <TD ALIGN=\"RIGHT\">4.19%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 8,
+            "parent": 6,
+            "lower_child": 9,
+            "upper_child": 10,
+            "n_node_samples": 174,
+            "depth": 5,
+            "split_type": "CATEGORIC",
+            "feature": "Are you a Smoker?",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "Unknown"
+                ],
+                [
+                    2,
+                    "No"
+                ],
+                [
+                    3,
+                    "Yes"
+                ]
+            ],
+            "threshold": 0.5267857142857143,
+            "leaftext": "Stroke Risk: 25.86%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">129</TD>\n          <TD ALIGN=\"RIGHT\">74.14%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">45</TD>\n          <TD ALIGN=\"RIGHT\">25.86%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 9,
+            "parent": 8,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 125,
+            "depth": 6,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 0.75,
+            "leaftext": "Stroke Risk: 5.60%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">118</TD>\n          <TD ALIGN=\"RIGHT\">94.40%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">7</TD>\n          <TD ALIGN=\"RIGHT\">5.60%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 10,
+            "parent": 8,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 49,
+            "depth": 6,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                true,
+                false,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 0.125,
+            "leaftext": "Stroke Risk: 77.55%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">11</TD>\n          <TD ALIGN=\"RIGHT\">22.45%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">38</TD>\n          <TD ALIGN=\"RIGHT\">77.55%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 11,
+            "parent": 3,
+            "lower_child": 12,
+            "upper_child": 17,
+            "n_node_samples": 9996,
+            "depth": 3,
+            "split_type": "PARALLEL",
+            "feature": "What is your Body Mass Index (BMI)? (kg/m^2)",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 31.759107954999998,
+            "leaftext": "Stroke Risk: 1.86%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">9810</TD>\n          <TD ALIGN=\"RIGHT\">98.14%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">186</TD>\n          <TD ALIGN=\"RIGHT\">1.86%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 12,
+            "parent": 11,
+            "lower_child": 13,
+            "upper_child": 16,
+            "n_node_samples": 8893,
+            "depth": 4,
+            "split_type": "CATEGORIC",
+            "feature": "Are you taking Antihypertensive Drugs?",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "Unknown"
+                ],
+                [
+                    2,
+                    "No"
+                ],
+                [
+                    3,
+                    "Yes"
+                ],
+                [
+                    4,
+                    "Maybe"
+                ]
+            ],
+            "threshold": 0.8292682926829267,
+            "leaftext": "Stroke Risk: 1.73%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">8739</TD>\n          <TD ALIGN=\"RIGHT\">98.27%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">154</TD>\n          <TD ALIGN=\"RIGHT\">1.73%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 13,
+            "parent": 12,
+            "lower_child": 14,
+            "upper_child": 15,
+            "n_node_samples": 1173,
+            "depth": 5,
+            "split_type": "PARALLEL",
+            "feature": "How old are you? (years)",
+            "categoric_split": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 78.5,
+            "leaftext": "Stroke Risk: %6.05",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">1102</TD>\n          <TD ALIGN=\"RIGHT\">93.95%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">71</TD>\n          <TD ALIGN=\"RIGHT\">6.05%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 14,
+            "parent": 13,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 1151,
+            "depth": 6,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 0.25,
+            "leaftext": "Stroke Risk: 4.78%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">1096</TD>\n          <TD ALIGN=\"RIGHT\">95.22%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">55</TD>\n          <TD ALIGN=\"RIGHT\">4.78%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 15,
+            "parent": 13,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 22,
+            "depth": 6,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 0.3660714285714286,
+            "leaftext": "Stroke Risk: 72.73%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">6</TD>\n          <TD ALIGN=\"RIGHT\">27.27%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">16</TD>\n          <TD ALIGN=\"RIGHT\">72.73%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 16,
+            "parent": 12,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 7720,
+            "depth": 5,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                true,
+                false
+            ],
+            "levels": [],
+            "threshold": 0.5,
+            "leaftext": "Stroke Risk: 1.08%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">7637</TD>\n          <TD ALIGN=\"RIGHT\">98.92%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">83</TD>\n          <TD ALIGN=\"RIGHT\">1.08%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 17,
+            "parent": 11,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 1103,
+            "depth": 4,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                true,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 4.0e-323,
+            "leaftext": "Stroke Risk: 2.90%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">1071</TD>\n          <TD ALIGN=\"RIGHT\">97.10%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">32</TD>\n          <TD ALIGN=\"RIGHT\">2.90%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 18,
+            "parent": 2,
+            "lower_child": 19,
+            "upper_child": 20,
+            "n_node_samples": 109,
+            "depth": 2,
+            "split_type": "CATEGORIC",
+            "feature": "Are you a Smoker?",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "Unknown"
+                ],
+                [
+                    2,
+                    "No"
+                ],
+                [
+                    3,
+                    "Yes"
+                ]
+            ],
+            "threshold": 0.14285714285714285,
+            "leaftext": "Stroke Risk: 46.79%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">58</TD>\n          <TD ALIGN=\"RIGHT\">53.21%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">51</TD>\n          <TD ALIGN=\"RIGHT\">46.79%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 19,
+            "parent": 18,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 74,
+            "depth": 3,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 0.13196125907990314,
+            "leaftext": "Stroke Risk: 29.73%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">52</TD>\n          <TD ALIGN=\"RIGHT\">70.27%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">22</TD>\n          <TD ALIGN=\"RIGHT\">29.73%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 20,
+            "parent": 18,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 35,
+            "depth": 3,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 0.0,
+            "leaftext": "Stroke Risk: 82.86%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">6</TD>\n          <TD ALIGN=\"RIGHT\">17.14%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">29</TD>\n          <TD ALIGN=\"RIGHT\">82.86%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 21,
+            "parent": 1,
+            "lower_child": 22,
+            "upper_child": 45,
+            "n_node_samples": 1277,
+            "depth": 1,
+            "split_type": "PARALLEL",
+            "feature": "What is your Blood Glucose level? (mg/dl)",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 201.5,
+            "leaftext": "Stroke Risk: 31.95%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">869</TD>\n          <TD ALIGN=\"RIGHT\">68.05%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">408</TD>\n          <TD ALIGN=\"RIGHT\">31.95%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 22,
+            "parent": 21,
+            "lower_child": 23,
+            "upper_child": 42,
+            "n_node_samples": 1239,
+            "depth": 2,
+            "split_type": "CATEGORIC",
+            "feature": "Have you had a Myocardial Infarction (MI) in the past and how many?",
+            "categoric_split": [
+                false,
+                true,
+                true,
+                false,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "Unknown"
+                ],
+                [
+                    2,
+                    "No Infarction"
+                ],
+                [
+                    3,
+                    "1 Infarction"
+                ],
+                [
+                    4,
+                    "2 Infarctions"
+                ],
+                [
+                    5,
+                    "3 Infarctions"
+                ]
+            ],
+            "threshold": 0.5267857142857143,
+            "leaftext": "Stroke Risk: 30.75%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">858</TD>\n          <TD ALIGN=\"RIGHT\">69.25%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">381</TD>\n          <TD ALIGN=\"RIGHT\">30.75%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 23,
+            "parent": 22,
+            "lower_child": 24,
+            "upper_child": 27,
+            "n_node_samples": 1186,
+            "depth": 3,
+            "split_type": "PARALLEL",
+            "feature": "What is your Hematocrit level? (percent %)",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 38.199999999999996,
+            "leaftext": "Stroke Risk: 29.01%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">842</TD>\n          <TD ALIGN=\"RIGHT\">70.99%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">344</TD>\n          <TD ALIGN=\"RIGHT\">29.01%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 24,
+            "parent": 23,
+            "lower_child": 25,
+            "upper_child": 26,
+            "n_node_samples": 73,
+            "depth": 4,
+            "split_type": "CATEGORIC",
+            "feature": "Do you have an abnomality in your T_wave?",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                true
+            ],
+            "levels": [
+                [
+                    1,
+                    "Yes"
+                ],
+                [
+                    2,
+                    "No"
+                ]
+            ],
+            "threshold": 0.5,
+            "leaftext": "Stroke Risk: 41.10%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">43</TD>\n          <TD ALIGN=\"RIGHT\">58.90%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">30</TD>\n          <TD ALIGN=\"RIGHT\">41.10%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 25,
+            "parent": 24,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 53,
+            "depth": 5,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 0.0,
+            "leaftext": "Stroke Risk: 32.08%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">36</TD>\n          <TD ALIGN=\"RIGHT\">67.92%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">17</TD>\n          <TD ALIGN=\"RIGHT\">32.08%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 26,
+            "parent": 24,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 20,
+            "depth": 5,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                true,
+                false,
+                true,
+                true,
+                false
+            ],
+            "levels": [],
+            "threshold": 2.462287635e-314,
+            "leaftext": "Stroke Risk: 65.00%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">7</TD>\n          <TD ALIGN=\"RIGHT\">35.00%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">13</TD>\n          <TD ALIGN=\"RIGHT\">65.00%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 27,
+            "parent": 23,
+            "lower_child": 28,
+            "upper_child": 35,
+            "n_node_samples": 1113,
+            "depth": 4,
+            "split_type": "PARALLEL",
+            "feature": "How old are you? (years)",
+            "categoric_split": [
+                false,
+                false,
+                false,
+                true,
+                true
+            ],
+            "levels": [],
+            "threshold": 69.5,
+            "leaftext": "Stroke Risk: 28.21%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">799</TD>\n          <TD ALIGN=\"RIGHT\">71.79%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">314</TD>\n          <TD ALIGN=\"RIGHT\">28.21%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 28,
+            "parent": 27,
+            "lower_child": 29,
+            "upper_child": 34,
+            "n_node_samples": 856,
+            "depth": 5,
+            "split_type": "CATEGORIC",
+            "feature": "Do you have Hypertension?",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                true,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "NA"
+                ],
+                [
+                    2,
+                    "Elevated"
+                ],
+                [
+                    3,
+                    "HBP Stage 1"
+                ],
+                [
+                    4,
+                    "HBP Stage 2"
+                ],
+                [
+                    5,
+                    "Normal"
+                ]
+            ],
+            "threshold": 0.34413264907873986,
+            "leaftext": "Stroke Risk: 24.53%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">646</TD>\n          <TD ALIGN=\"RIGHT\">75.47%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">210</TD>\n          <TD ALIGN=\"RIGHT\">24.53%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 29,
+            "parent": 28,
+            "lower_child": 30,
+            "upper_child": 33,
+            "n_node_samples": 572,
+            "depth": 6,
+            "split_type": "CATEGORIC",
+            "feature": "Have you had a Transient Ischemic Attack (TIA) in the past?",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "Unknown"
+                ],
+                [
+                    2,
+                    "No"
+                ],
+                [
+                    3,
+                    "Yes"
+                ]
+            ],
+            "threshold": 0.6036585365853658,
+            "leaftext": "Stroke Risk: 30.24%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">399</TD>\n          <TD ALIGN=\"RIGHT\">69.76%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">173</TD>\n          <TD ALIGN=\"RIGHT\">30.24%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 30,
+            "parent": 29,
+            "lower_child": 31,
+            "upper_child": 32,
+            "n_node_samples": 538,
+            "depth": 7,
+            "split_type": "PARALLEL",
+            "feature": "What is your Hematocrit level? (percent %)",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 38.95,
+            "leaftext": "Stroke Risk: 26.58%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">395</TD>\n          <TD ALIGN=\"RIGHT\">73.42%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">143</TD>\n          <TD ALIGN=\"RIGHT\">26.58%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 31,
+            "parent": 30,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 24,
+            "depth": 8,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                true,
+                true,
+                true,
+                true,
+                true
+            ],
+            "levels": [],
+            "threshold": 2.255405792e-314,
+            "leaftext": "Stroke Risk: 58.33%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">10</TD>\n          <TD ALIGN=\"RIGHT\">41.67%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">14</TD>\n          <TD ALIGN=\"RIGHT\">58.33%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 32,
+            "parent": 30,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 514,
+            "depth": 8,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                true,
+                true,
+                true,
+                true,
+                true
+            ],
+            "levels": [],
+            "threshold": 0.0,
+            "leaftext": "Stroke Risk: 25.10%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">385</TD>\n          <TD ALIGN=\"RIGHT\">74.90%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">129</TD>\n          <TD ALIGN=\"RIGHT\">25.10%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 33,
+            "parent": 29,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 34,
+            "depth": 7,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 0.6977351916376306,
+            "leaftext": "Stroke Risk: 88.24%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">4</TD>\n          <TD ALIGN=\"RIGHT\">11.76%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">30</TD>\n          <TD ALIGN=\"RIGHT\">88.24%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 34,
+            "parent": 28,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 284,
+            "depth": 6,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 4.0e-323,
+            "leaftext": "Stroke Risk: 13.03%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">247</TD>\n          <TD ALIGN=\"RIGHT\">86.97%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">37</TD>\n          <TD ALIGN=\"RIGHT\">13.03%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 35,
+            "parent": 27,
+            "lower_child": 36,
+            "upper_child": 39,
+            "n_node_samples": 257,
+            "depth": 5,
+            "split_type": "PARALLEL",
+            "feature": "How old are you? (years)",
+            "categoric_split": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 72.5,
+            "leaftext": "Stroke Risk: 40.47%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">153</TD>\n          <TD ALIGN=\"RIGHT\">59.53%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">104</TD>\n          <TD ALIGN=\"RIGHT\">40.47%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 36,
+            "parent": 35,
+            "lower_child": 37,
+            "upper_child": 38,
+            "n_node_samples": 98,
+            "depth": 6,
+            "split_type": "CATEGORIC",
+            "feature": "Do you have an abnomality in your T_wave?",
+            "categoric_split": [
+                false,
+                true,
+                false,
+                false,
+                true
+            ],
+            "levels": [
+                [
+                    1,
+                    "Yes"
+                ],
+                [
+                    2,
+                    "No"
+                ]
+            ],
+            "threshold": 0.5,
+            "leaftext": "Stroke Risk: 36.73%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">62</TD>\n          <TD ALIGN=\"RIGHT\">63.27%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">36</TD>\n          <TD ALIGN=\"RIGHT\">36.73%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 37,
+            "parent": 36,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 71,
+            "depth": 7,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                true,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 0.309791332247191,
+            "leaftext": "Stroke Risk: 28.17%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">51</TD>\n          <TD ALIGN=\"RIGHT\">71.83%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">20</TD>\n          <TD ALIGN=\"RIGHT\">28.17%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 38,
+            "parent": 36,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 27,
+            "depth": 7,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 0.0,
+            "leaftext": "Stroke Risk: 59.36%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">11</TD>\n          <TD ALIGN=\"RIGHT\">40.74%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">16</TD>\n          <TD ALIGN=\"RIGHT\">59.26%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 39,
+            "parent": 35,
+            "lower_child": 40,
+            "upper_child": 41,
+            "n_node_samples": 159,
+            "depth": 6,
+            "split_type": "PARALLEL",
+            "feature": "What is your High-density lipoprotein (HDL) level? (mg/dl)",
+            "categoric_split": [
+                true,
+                true,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 39.91666666500001,
+            "leaftext": "Stroke Risk: 42.77%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">91</TD>\n          <TD ALIGN=\"RIGHT\">57.23%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">68</TD>\n          <TD ALIGN=\"RIGHT\">42.77%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 40,
+            "parent": 39,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 48,
+            "depth": 7,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 4.0e-323,
+            "leaftext": "Stroke Risk: 91.67%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">4</TD>\n          <TD ALIGN=\"RIGHT\">8.33%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">44</TD>\n          <TD ALIGN=\"RIGHT\">91.67%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 41,
+            "parent": 39,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 111,
+            "depth": 7,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                false,
+                true
+            ],
+            "levels": [],
+            "threshold": 2.255405792e-314,
+            "leaftext": "Stroke Risk: 21.62%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">87</TD>\n          <TD ALIGN=\"RIGHT\">78.38%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">24</TD>\n          <TD ALIGN=\"RIGHT\">21.62%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 42,
+            "parent": 22,
+            "lower_child": 43,
+            "upper_child": 44,
+            "n_node_samples": 53,
+            "depth": 3,
+            "split_type": "CATEGORIC",
+            "feature": "Do you have Hypertension?",
+            "categoric_split": [
+                false,
+                true,
+                true,
+                true,
+                false
+            ],
+            "levels": [
+                [
+                    1,
+                    "NA"
+                ],
+                [
+                    2,
+                    "Elevated"
+                ],
+                [
+                    3,
+                    "HBP Stage 1"
+                ],
+                [
+                    4,
+                    "HBP Stage 2"
+                ],
+                [
+                    5,
+                    "Normal"
+                ]
+            ],
+            "threshold": 0.0,
+            "leaftext": "Stroke Risk: 69.81%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">16</TD>\n          <TD ALIGN=\"RIGHT\">30.19%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">37</TD>\n          <TD ALIGN=\"RIGHT\">69.81%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 43,
+            "parent": 42,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 33,
+            "depth": 4,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                true,
+                true,
+                false
+            ],
+            "levels": [],
+            "threshold": 2.3964763834e-314,
+            "leaftext": "Stroke Risk: 90.91%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">3</TD>\n          <TD ALIGN=\"RIGHT\">9.09%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">30</TD>\n          <TD ALIGN=\"RIGHT\">90.91%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 44,
+            "parent": 42,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 20,
+            "depth": 4,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 0.25,
+            "leaftext": "Stroke Risk: 35.00%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">13</TD>\n          <TD ALIGN=\"RIGHT\">65.00%</TD>\n        </TR>\n        <TR>\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">7</TD>\n          <TD ALIGN=\"RIGHT\">35.00%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        },
+        {
+            "id": 45,
+            "parent": 21,
+            "lower_child": -2,
+            "upper_child": -2,
+            "n_node_samples": 38,
+            "depth": 2,
+            "split_type": "LEAF",
+            "feature": "",
+            "categoric_split": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "levels": [],
+            "threshold": 2.4622873464e-314,
+            "leaftext": "Stroke Risk: 71.05%",
+            "tabletext": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<TABLE class=\"centered\">\n  <TR>\n    <TD>\n      <TABLE CELLSPACING=\"0\">\n        <TH>Outcome</TH>\n        <TH>Count</TH>\n        <TH>Probability</TH>\n        <TR>\n          <TD ALIGN=\"LEFT\">no_stroke</TD>\n          <TD ALIGN=\"RIGHT\">11</TD>\n          <TD ALIGN=\"RIGHT\">28.95%</TD>\n        </TR>\n        <TR class=\"highlighted\">\n          <TD ALIGN=\"LEFT\">stroke</TD>\n          <TD ALIGN=\"RIGHT\">27</TD>\n          <TD ALIGN=\"RIGHT\">71.05%</TD>\n        </TR>\n      </TABLE>\n    </TD>\n  </TR>\n</TABLE>\n",
+            "curvedata": []
+        }
+    ],
+    "simple_layout": false
+}
+;
+        /* global $ */
+
+function isIE() {
+  return navigator.userAgent.indexOf('MSIE ') > -1 ||
+         navigator.userAgent.indexOf('Trident/') > -1;
+}
+function isIOS() {
+  return navigator.platform.substr(0,2) === 'iP';
+}
+
+var treedata;
+var knownInfo = [];
+var questionVisible = [];
+
+var zindex = 1;
+
+$(document).ready(function(){
+  $('select').formSelect();
+  $('.fixed-action-btn').floatingActionButton();
+});
+
+var answerQuestionButton = function() {
+  var buttonrow = this.parentElement.parentElement;
+  $(buttonrow).find('.btn').each(function(i, eachbutton) {
+    $(eachbutton).removeClass('primary-darker').addClass('unselected');
+  });
+
+  $(this).removeClass('unselected').addClass('primary-darker');
+
+  var question = this.parentElement.parentElement.parentElement.parentElement;
+  var nodeId = parseInt(question.getAttribute('id')) - 1;
+  var newValue = parseFloat(this.getAttribute('value'));
+  if (isNaN(newValue)) {
+    newValue = undefined;
+  }
+  answerQuestion(nodeId, newValue);
+};
+
+var answerQuestionSelect = function() {
+  var question = this;
+  while (question.parentElement.getAttribute('id') != 'dynamic-questions') {
+    question = question.parentElement;
+  }
+
+  var nodeId = parseInt(question.getAttribute('id')) - 1;
+  var newValue = this.value;
+  answerQuestion(nodeId, newValue);
+};
+
+var answerQuestionText = function() {
+  var question = this.parentElement.parentElement;
+  var nodeId = parseInt(question.getAttribute('id')) - 1;
+  var newValue = parseFloat(this.value);
+  if (isNaN(newValue)) {
+    newValue = undefined;
+  }
+  answerQuestion(nodeId, newValue);
+};
+
+var answerQuestion = function(nodeId, newValue) {
+  var node = treedata.nodes[nodeId];
+  knownInfo[node.feature] = newValue;
+  refreshQuestions(nodeId);
+};
+
+var refreshQuestions = function(nodeId) {
+  // Hide keyboard on iOS
+  if (isIOS()) {
+    $('.question input').blur();
+  }
+
+  for (var i = nodeId + 1; i < treedata.nodes.length; i++) {
+    if (questionVisible[i]) {
+      var feature = treedata.nodes[i].feature;
+      if (feature) {
+        knownInfo[feature] = undefined;
+      }
+    }
+    questionVisible[i] = false;
+  }
+
+  i = nodeId;
+  while (true) {
+    var node = treedata.nodes[i];
+    if (node.split_type == 'LEAF') {
+      questionVisible[i] = true;
+      break;
+    }
+
+    var feature = node.feature;
+    var value = knownInfo[feature];
+
+    // Don't know this variable yet
+    if (value === undefined) {
+      questionVisible[i] = true;
+      break;
+    }
+
+    var islower;
+    if (node.split_type == 'CATEGORIC') {
+      var level = node.levels[value - 1][0];
+      islower = node.categoric_split[level - 1];
+    } else {
+      islower = (value < node.threshold);
+    }
+
+    i = (islower ? node.lower_child : node.upper_child) - 1;
+  }
+
+  $('#dynamic-questions').children().each(function(i, question) {
+    var node_id = parseInt(question.getAttribute('id'));
+    if (questionVisible[node_id - 1]) {
+      $(question).show();
+      $(question).addClass('scale-in');
+      var node = treedata.nodes[node_id - 1];
+      if (knownInfo[node.feature] === undefined) {
+        $(question).find('a').removeClass('unselected').removeClass('primary-darker');
+        $(question).find('select').val('').formSelect();
+        $(question).find('input[type="number"]').val('');
+
+        // Focus next element except on IOS where it can cause keyboard to cover
+        // new question
+        if (!isIOS()) {
+          $(question).find('select').focus();
+          $(question).find('input[type="number"]').focus();
+        }
+      }
+    } else {
+      $(question).removeClass('scale-in');
+      $(question).hide();
+      $(question).find('select').val('');
+      $(question).find('input[type="number"]').val('');
+    }
+  });
+
+  // update the width of progress bar
+  var percent_finished = treedata.nodes[i].depth/treedata.nodes[i].maxdepth;
+  $('.progress .determinate').css('width', percent_finished * 100 + '%');
+  // Scroll to bottom question
+  $(window).scrollTop($(document).height());
+};
+
+var resetQuestions = function() {
+  knownInfo = [];
+  refreshQuestions(0);
+};
+
+var loadtree = function(treejson) {
+
+  treedata = treejson;
+
+  var questions = $('#dynamic-questions');
+  questions.empty();
+
+  var nodes = treedata.nodes;
+
+  // Loop through to create the maximum depth at a sub tree
+  for (var i = nodes.length; i >= 1; i--) {
+    var node = nodes[i - 1];
+    if (node.split_type == 'LEAF') {
+      node.maxdepth = node.depth;
+    } else {
+      node.maxdepth = Math.max(
+        nodes[node.lower_child - 1].maxdepth,
+        nodes[node.upper_child - 1].maxdepth);
+    }
+  }
+
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    var div = document.createElement('div');
+    div.setAttribute('class', 'card hoverable scale-transition scale-out');
+    div.setAttribute('id', node.id);
+    // Adjust the z-index to be on top when the question is clicked so that
+    // any dropdown is always drawn on top
+    $(div).click(function () {
+      $(this).css('z-index', zindex++);
+    });
+
+    if (!treedata.simple_layout) {
+      var stats = document.createElement('div');
+      stats.setAttribute('class', 'card-content stats');
+      div.appendChild(stats);
+
+
+      var stats1 = document.createElement('span');
+      stats1.appendChild(document.createTextNode('n = ' + node.n_node_samples));
+      stats.appendChild(stats1);
+
+      if (node.split_type != 'LEAF') {
+        var stats2 = document.createElement('span');
+        stats2.className = 'right';
+        stats2.appendChild(document.createTextNode(node.leaftext));
+        stats.appendChild(stats2);
+      }
+    }
+
+    var content = document.createElement('div');
+    content.setAttribute('class', 'card-content main');
+    div.appendChild(content);
+
+    var questionheading = document.createElement('span');
+    questionheading.setAttribute('class', 'card-title');
+    content.appendChild(questionheading);
+
+    var varname = node.feature;
+
+
+    if (node.split_type != 'LEAF') {
+      questionheading.appendChild(document.createTextNode(varname));
+
+      if (node.split_type == 'CATEGORIC') {
+        // Categoric
+        var levels = node.levels;
+        content.appendChild(makeselect(levels));
+      } else {
+        // Parallel
+
+        if (node.threshold == 0.5) {
+          // Binary
+          var buttonGroup = document.createElement('div');
+          buttonGroup.setAttribute('class', 'card-content');
+
+          var buttonRow = document.createElement('div');
+          buttonRow.setAttribute('class', 'row button-row');
+          content.appendChild(buttonRow);
+
+          var cutoff = +node.threshold.toFixed(4);
+          addbutton(buttonRow, node.id, '≥ ' + cutoff);
+          addbutton(buttonRow, node.id, '< ' + cutoff);
+
+        } else {
+          var textbox = document.createElement('input');
+          textbox.setAttribute('type', 'number');
+          textbox.setAttribute('placeholder', 'Enter a value...');
+          textbox.setAttribute('class', 'input-field');
+          content.appendChild(textbox);
+          $(textbox).change(answerQuestionText);
+
+          // Hack for IE to advance question on pressing enter
+          if (isIE()) {
+            $(textbox).on('keyup', function(e) {
+              if (e.keyCode == '13') {
+                e.preventDefault();
+                $(this).trigger('blur');
+              }
+            });
+          }
+        }
+
+      }
+    } else {
+      questionheading.className += ' center-align';
+      questionheading.appendChild(document.createTextNode('Final Prediction'));
+
+      if (node.tabletext == '') {
+        var result = document.createElement('div');
+        result.setAttribute('class', 'card-results');
+        result.appendChild(document.createTextNode(node.leaftext));
+        content.appendChild(result);
+      } else {
+        var result2 = document.createElement('div');
+        result2.setAttribute('class', 'card card-table primary-lighter');
+        $(result2).append(node.tabletext);
+        content.appendChild(result2);
+      }
+    }
+
+    questions.append(div);
+  }
+  resetQuestions();
+};
+
+
+function addbutton(buttonRow, id, text) {
+  var buttonSpan = document.createElement('span');
+  buttonSpan.setAttribute('class', 'col s6 button');
+  buttonRow.appendChild(buttonSpan);
+
+  var buttonLabel = document.createElement('a');
+  buttonLabel.setAttribute('class', 'waves-effect waves-light btn primary');
+  buttonSpan.appendChild(buttonLabel);
+
+  var value;
+  if (text == '< 0.5') {
+    text = 'No';
+    value = 0;
+  } else if (text == '≥ 0.5') {
+    text = 'Yes';
+    value = 1;
+  }
+  buttonLabel.setAttribute('value', value);
+  buttonLabel.append(text);
+  $(buttonLabel).click(answerQuestionButton);
+}
+
+var makeselect = function(levels) {
+
+  var selectdiv = document.createElement('div');
+  selectdiv.setAttribute('class', 'input-field');
+
+  var select = document.createElement('select');
+  if (isIOS()) {
+    select.className += ' browser-default';
+  }
+  selectdiv.appendChild(select);
+
+  var option = document.createElement('option');
+  option.setAttribute('disabled', '');
+  option.setAttribute('selected', '');
+  option.appendChild(document.createTextNode('Choose an answer...'));
+  select.appendChild(option);
+
+  for (var r = 0; r < levels.length; r++) {
+    var value = levels[r][0];
+    var level = levels[r][1];
+
+    option = document.createElement('option');
+    option.setAttribute('value', value);
+    option.appendChild(document.createTextNode(level));
+    select.appendChild(option);
+  }
+  $(select).change(answerQuestionSelect);
+  return selectdiv;
+};
+
+        $('.brand-logo, .btn-floating').click(resetQuestions);
+        loadtree(treejson);
+      })();
+    </script>
+  </body>
+</html>
+
